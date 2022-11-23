@@ -44,6 +44,8 @@ dependencies:
   chopper: ^5.1.0
   path_to_regexp: ^0.4.0
   flutter_secure_storage: ^6.0.0
+  flutter_ripple: ^0.0.3
+  url_launcher: ^6.1.7
 
 dev_dependencies:
   flutter_test:

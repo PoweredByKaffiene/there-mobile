@@ -43,8 +43,7 @@ class AuthenticationController extends GetxController {
   }
 
   Future deleteToken() async {
-    // await _secureStorage.delete(key: 'token');
-    // await _secureStorage.delete(key: 'user_id');
+    await _secureStorage.delete(key: 'access_token');
   }
 
   Future<bool> login(email, password) async {
@@ -57,13 +56,13 @@ class AuthenticationController extends GetxController {
     return state == AuthState.loggedIn;
   }
 
-  // void logout() async {
-  //   await authService.logout();
+  void logout() async {
+    await authService.logout();
 
-  //   await deleteToken();
+    await deleteToken();
 
-  //   updateAuthState();
-  // }
+    updateAuthState();
+  }
 
   Future<User> fetchAuthenticatedUser() async {
     return (await authService.me()).body!;

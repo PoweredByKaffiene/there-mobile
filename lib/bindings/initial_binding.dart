@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:there/constants.dart';
 import 'package:there/controller/user_controller.dart';
 import 'package:there/model/login_result.dart';
+import 'package:there/model/logout_result.dart';
 import 'package:there/services/authentication.dart';
 
 import '../controller/auth_controller.dart';
@@ -15,8 +16,10 @@ class InitialBinding implements Bindings {
     Get.put(ChopperClient(
       baseUrl: apiBaseURL,
       converter: JsonToTypeConverter({
-        LoginResult: (jsonData) => LoginResult.fromJson(jsonData),
         User: (jsonData) => User.fromJson(jsonData),
+
+        LoginResult: (jsonData) => LoginResult.fromJson(jsonData),
+        LogoutResult: (jsonData) => LogoutResult.fromJson(jsonData),
       }),
       interceptors: [
         HttpLoggingInterceptor(),

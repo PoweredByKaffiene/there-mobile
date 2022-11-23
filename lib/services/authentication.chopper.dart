@@ -30,6 +30,17 @@ class _$AuthenticationService extends AuthenticationService {
   }
 
   @override
+  Future<Response<LogoutResult>> logout() {
+    final String $url = '/authentication/logout';
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<LogoutResult, LogoutResult>($request);
+  }
+
+  @override
   Future<Response<User>> me() {
     final String $url = '/authentication/me';
     final Request $request = Request(

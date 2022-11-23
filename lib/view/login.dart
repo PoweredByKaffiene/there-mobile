@@ -7,15 +7,16 @@ import 'package:there/controller/user_controller.dart';
 import 'package:there/widgets/layout/root.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
+
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  AuthenticationController _authController = Get.find<AuthenticationController>();
+
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var colorScheme = theme.colorScheme;
-
-    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-    AuthenticationController _authController = Get.find<AuthenticationController>();
     
     String? email;
     String? password;
@@ -94,7 +95,6 @@ class LoginScreen extends StatelessWidget {
               )
             ),
             SizedBox(height: 2.h),
-            Text(_authController.state.toString()),
           ],
         ),
       ),
