@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:there/controller/auth_controller.dart';
+import 'package:there/controller/user_controller.dart';
 
 import 'package:there/widgets/layout/root.dart';
 
@@ -10,6 +13,30 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var colorScheme = theme.colorScheme;
+
+    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    AuthenticationController _authController = Get.find<AuthenticationController>();
+    
+    String? email;
+    String? password;
+
+    void attemptLogin() {
+      _authController.login(email, password).then((wasSuccessful) {
+        if (wasSuccessful) {
+          Get.offAllNamed('/home');
+        }
+      });
+    }
+
+    void onSubmit () {
+      if (_formKey.currentState!.validate() != true) {
+        return;
+      }
+
+      _formKey.currentState!.save();
+
+      attemptLogin();
+    }
 
     return Root(
       child: Container(
@@ -24,6 +51,7 @@ class LoginScreen extends StatelessWidget {
             const Divider(),
             SizedBox(height: 6.h),
             Form(
+              key: _formKey,
               child: Column(
                 children: [
                   TextFormField(
@@ -32,6 +60,8 @@ class LoginScreen extends StatelessWidget {
                       hintText: "Enter your email",
                       border: OutlineInputBorder(),
                     ),
+                    validator: (value) => GetUtils.isEmail(value!) ? null : "Enter valid email",
+                    onSaved: (newValue) => email = newValue,
                   ),
                   SizedBox(height: 1.h),
                   TextFormField(
@@ -41,6 +71,8 @@ class LoginScreen extends StatelessWidget {
                       hintText: "Enter your password",
                       border: OutlineInputBorder(),
                     ),
+                    validator: (value) => value!.length < 6 ? "Password must be at least 6 characters" : null,
+                    onSaved: (newValue) => password = newValue,
                   ),
                   SizedBox(height: 2.h),
                   SizedBox(
@@ -54,13 +86,15 @@ class LoginScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: onSubmit,
                       child: const Text("Login"),
                     ),
                   ),
                 ],
               )
-            )
+            ),
+            SizedBox(height: 2.h),
+            Text(_authController.state.toString()),
           ],
         ),
       ),

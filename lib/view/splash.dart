@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:there/controller/auth_controller.dart';
+import 'package:there/controller/user_controller.dart';
 
 import 'dart:async';
 
@@ -17,8 +19,19 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
+  AuthenticationController _authController = Get.find<AuthenticationController>();
+
   void navigateAfter() async {
-    Get.offAllNamed('/login');
+    await _authController.updateAuthState();
+
+    switch (_authController.state) {
+      case AuthState.loggedIn:
+        Get.offAllNamed('/home');
+        break;
+      case AuthState.loggedOut:
+        Get.offAllNamed('/login');
+        break;
+    }
   }
 
   startTimer() async {
