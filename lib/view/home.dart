@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ripple/flutter_ripple.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:there/constants.dart';
 import 'package:there/controller/auth_controller.dart';
 
 import 'package:there/controller/user_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:web_socket_channel/io.dart';
 
 import '../widgets/layout/root.dart';
 
@@ -37,7 +39,16 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
+    initWebsocketConnection();
     initBackgroundTask();
+  }
+
+  void initWebsocketConnection() {
+    var ws = IOWebSocketChannel.connect(Uri.parse("ws://echo.websocket.events"));
+
+    ws.stream.listen((message) {
+      print("new ws message: $message");
+    });
   }
 
   Future initBackgroundTask() async {

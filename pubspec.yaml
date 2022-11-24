@@ -49,6 +49,7 @@ dependencies:
   background_location: 
     git:
       url: https://github.com/Almoullim/background_location
+  web_socket_channel: ^2.2.0
 
 dev_dependencies:
   flutter_test:
