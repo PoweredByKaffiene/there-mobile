@@ -1,3 +1,7 @@
+import 'dart:isolate';
+import 'dart:ui';
+
+import 'package:background_location/background_location.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ripple/flutter_ripple.dart';
@@ -10,11 +14,44 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/layout/root.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   UserController _userController = Get.find<UserController>();
-  AuthenticationController _authController = Get.find<AuthenticationController>();
+
+  AuthenticationController _authController =
+      Get.find<AuthenticationController>();
+
+  RxBool isRunning = false.obs;
+
+  void onLocationUpdate(location) {
+    print(location.toMap().toString());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    initBackgroundTask();
+  }
+
+  Future initBackgroundTask() async {
+    await BackgroundLocation.setAndroidNotification(
+      title: "There Background Service",
+            message: "Sharing Location in the background",
+            icon: "@mipmap/ic_launcher",
+    );
+
+    await BackgroundLocation.setAndroidConfiguration(2500);
+    await BackgroundLocation.startLocationService();
+
+    BackgroundLocation.getLocationUpdates(onLocationUpdate);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,16 +77,6 @@ class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(height: 2.h),
-          // Row(children: [
-          //   Text("Hello, ",
-          //       style: theme.textTheme.headline2?.copyWith(
-          //           color: theme.primaryColor, fontWeight: FontWeight.bold),
-          //       textAlign: TextAlign.start),
-          //   Obx(() => Text(_userController.user?.username ?? '',
-          //       style: theme.textTheme.headline2?.copyWith(
-          //           color: theme.primaryColor, fontWeight: FontWeight.bold),
-          //       textAlign: TextAlign.start)),
-          // ]),
           Expanded(
             child: FlutterRipple(
               radius: 40.w,
@@ -70,9 +97,10 @@ class HomeScreen extends StatelessWidget {
                       color: theme.primaryColor,
                       fontWeight: FontWeight.bold,
                       decoration: TextDecoration.underline),
-                  recognizer: TapGestureRecognizer()..onTap = () {
-                    launchUrl(Uri.parse("https://dontkillmyapp.com/"));
-                  }),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      launchUrl(Uri.parse("https://dontkillmyapp.com/"));
+                    }),
             ]),
             textAlign: TextAlign.center,
           ),

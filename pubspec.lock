@@ -29,6 +29,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.9.0"
+  background_location:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "6756c7c974721d5c2bf6894f04f20d2e08dc31b2"
+      url: "https://github.com/Almoullim/background_location"
+    source: git
+    version: "0.9.0"
   boolean_selector:
     dependency: transitive
     description:
