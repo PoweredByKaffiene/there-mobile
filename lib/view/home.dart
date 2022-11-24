@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:there/constants.dart';
 import 'package:there/controller/auth_controller.dart';
+import 'package:there/controller/location_controller.dart';
 
 import 'package:there/controller/user_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -29,10 +30,12 @@ class _HomeScreenState extends State<HomeScreen> {
   AuthenticationController _authController =
       Get.find<AuthenticationController>();
 
+  LocationController _locationController = Get.find<LocationController>();
+
   RxBool isRunning = false.obs;
 
-  void onLocationUpdate(location) {
-    print(location.toMap().toString());
+  void onLocationUpdate(location) async {
+    _locationController.saveLocation(location.latitude, location.longitude);
   }
 
   @override
@@ -44,11 +47,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void initWebsocketConnection() {
-    var ws = IOWebSocketChannel.connect(Uri.parse("ws://echo.websocket.events"));
+    // var ws = IOWebSocketChannel.connect(Uri.parse("ws://echo.websocket.events"));
 
-    ws.stream.listen((message) {
-      print("new ws message: $message");
-    });
+    // ws.stream.listen((message) {
+    //   print("new ws message: $message");
+    // });
   }
 
   Future initBackgroundTask() async {

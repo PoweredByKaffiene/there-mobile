@@ -57,7 +57,6 @@ class AuthInterceptor with RequestInterceptor, ResponseInterceptor {
 
     if (token == null) return request;
 
-
     return request.copyWith(headers: {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json',
@@ -67,6 +66,8 @@ class AuthInterceptor with RequestInterceptor, ResponseInterceptor {
 
   @override
   FutureOr<Response> onResponse(Response response) async {
+    print(response.bodyString);
+
     if (response.body is LoginResult) {
       await _secureStorage.write(key: 'access_token', value: response.body.tokens.access);
     }
